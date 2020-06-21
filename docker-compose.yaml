@@ -1,0 +1,29 @@
+# ./docker-compose.yaml
+
+# DEV docker compose file ——————————————————————————————————————————————————————
+# Check out: https://docs.docker.com/compose/gettingstarted/
+version: '3.7'
+
+# docker-compose -f docker-compose.yaml up -d
+services:
+
+  php:
+    build: docker/php
+    container_name: realforcetest_php
+    expose:
+      - '8000'
+    volumes:
+      - ./:/var/www/project
+      - ./var/log:/var/log
+
+  web:
+    build: docker/nginx
+    container_name: realforcetest_web
+    restart: always
+    ports:
+      - '81:80'
+    depends_on:
+      - php
+    volumes:
+      - ./:/var/www/project
+      - ./var/log:/var/log/nginx
